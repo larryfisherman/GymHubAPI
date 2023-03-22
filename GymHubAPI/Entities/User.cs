@@ -1,4 +1,4 @@
-﻿namespace GymHubAPI.Models.User
+﻿namespace GymHubAPI.Entities
 {
     public class User
     {

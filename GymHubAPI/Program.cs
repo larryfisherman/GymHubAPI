@@ -1,3 +1,7 @@
+using GymHubAPI.Models.User;
+using GymHubAPI.Services.User;
+using Microsoft.AspNetCore.Identity;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -23,3 +27,7 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+builder.Services.AddScoped<IUserService, UserService>();
+
+builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
