@@ -12,7 +12,6 @@ namespace GymHubAPI.Services
     public class UserService : IUserService
     {
         private readonly GymHubDbContext _dbContext;
-        private readonly IUserService _userService;
         private readonly IPasswordHasher<User> _passwordHasher;
 
         public UserService(GymHubDbContext dbContext, IPasswordHasher<User> passwordHasher)

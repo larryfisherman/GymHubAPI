@@ -1,4 +1,5 @@
-﻿using GymHubAPI.Services;
+﻿using GymHubAPI.Models;
+using GymHubAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GymHubAPI.Controllers.User
@@ -14,7 +15,11 @@ namespace GymHubAPI.Controllers.User
             _userService = userService;
         }
 
-        [HttpGet]
-        public ActionResult<IEnumerable<User>> GetAllUsers()
+        [HttpPost("register")]
+        public ActionResult RegisterUser([FromBody] RegisterUserDto dto)
+        {
+            _userService.RegisterUser(dto);
+            return Ok();
+        }
     } 
 }
