@@ -15,9 +15,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddDbContext<GymHubDbContext>();
 
 
 builder.Services.AddScoped<IUserService, UserService>();
+
+builder.Services.AddScoped<IRecipeService, RecipeService>();
+
 
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 
