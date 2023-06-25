@@ -4,8 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GymHubAPI.Controllers
 {
-    public class RecipeController
-    {
         [Route("api/recipes")]
         [ApiController]
         public class RecipeController : ControllerBase
@@ -38,6 +36,5 @@ namespace GymHubAPI.Controllers
             //    _recipeController.Delete(id);
             //    return Ok("Recipe removed");
             //}
-        }
     }
 }
