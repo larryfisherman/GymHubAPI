@@ -23,18 +23,18 @@ namespace GymHubAPI.Controllers
                 return Ok(recipes);
             }
 
-            //[HttpPost]
-            //public ActionResult CreateRecipe([FromBody] RecipeDto dto)
-            //{
-            //    var id = recipeController.Create(dto);
-            //    return Created($"/api/recipe/{id}", null);
-            //}
+           [HttpPost]
+            public ActionResult CreateRecipe([FromBody] RecipeDto dto)
+            {
+                _recipeService.Create(dto);
+                return Ok();
+            }
 
-            //[HttpDelete("{id}")]
-            //public ActionResult Delete([FromRoute] int id)
-            //{
-            //    _recipeController.Delete(id);
-            //    return Ok("Recipe removed");
-            //}
-    }
+            [HttpDelete("{id}")]
+            public ActionResult Delete([FromRoute] int id)
+            {
+                _recipeService.Delete(id);
+                return Ok("Recipe removed");
+            }
+        }
 }

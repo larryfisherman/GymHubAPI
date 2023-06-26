@@ -23,7 +23,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddDbContext<GymHubDbContext>();
-
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddSingleton(authenticationSettings);
 builder.Services.AddAuthentication(option =>
