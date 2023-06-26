@@ -10,9 +10,9 @@ namespace GymHubAPI.Services
         IEnumerable<Recipe> GetAllRecipes();
         public void Create(RecipeDto dto);
         public void Delete(int id);
-
+        RecipeDto GetById(int id);
     }
-
+        
     public class RecipeService : IRecipeService
     {
         private readonly GymHubDbContext _dbContext;
@@ -44,6 +44,19 @@ namespace GymHubAPI.Services
 
             _dbContext.Recipes.Remove(recipe);
             _dbContext.SaveChanges();
+        }
+
+        public RecipeDto GetById(int id)
+        {
+            var recipe = _dbContext
+              .Recipes
+              .FirstOrDefault(r => r.Id == id);
+
+            if (recipe is null) throw new NotFoundException("Recipe not found");
+
+            var result = _mapper.Map<RecipeDto>(recipe);
+
+            return result;
         }
     }
 }

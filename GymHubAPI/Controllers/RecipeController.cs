@@ -1,4 +1,5 @@
-﻿using GymHubAPI.Models;
+﻿using GymHubAPI.Entities;
+using GymHubAPI.Models;
 using GymHubAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,10 +10,12 @@ namespace GymHubAPI.Controllers
         public class RecipeController : ControllerBase
         {
             private readonly IRecipeService _recipeService;
+            private readonly GymHubDbContext _dbContext;
 
-            public RecipeController(IRecipeService recipeService)
+            public RecipeController(IRecipeService recipeService, GymHubDbContext dbContext)
             {
                 _recipeService = recipeService;
+                _dbContext = dbContext;
             }
 
             [HttpGet]
@@ -23,7 +26,14 @@ namespace GymHubAPI.Controllers
                 return Ok(recipes);
             }
 
-           [HttpPost]
+            [HttpGet("{id}")]
+            public ActionResult<RecipeDto> GetById([FromRoute] int id)
+            {
+                RecipeDto recipe = _recipeService.GetById(id);
+                return Ok(recipe);
+            }
+
+            [HttpPost]
             public ActionResult CreateRecipe([FromBody] RecipeDto dto)
             {
                 _recipeService.Create(dto);
@@ -36,5 +46,7 @@ namespace GymHubAPI.Controllers
                 _recipeService.Delete(id);
                 return Ok("Recipe removed");
             }
+
+          
         }
 }
