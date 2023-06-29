@@ -24,6 +24,14 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddDbContext<GymHubDbContext>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("FrontEndClient", builder =>
+        builder.AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowAnyOrigin()
+        );
+});
 
 builder.Services.AddSingleton(authenticationSettings);
 builder.Services.AddAuthentication(option =>
@@ -48,6 +56,8 @@ builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddScoped<IRecipeService, RecipeService>();
 
+builder.Services.AddScoped<IWorkoutService, WorkoutService>();
+
 
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 
@@ -65,6 +75,8 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseCors("FrontEndClient");
 
 app.Run();
 

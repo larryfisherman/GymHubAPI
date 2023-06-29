@@ -40,7 +40,7 @@ namespace GymHubAPI.Services
         {
             var recipe = _dbContext.Recipes.FirstOrDefault(r => r.Id == id);
 
-            if (recipe is null) throw new NotFoundException("Movie not found");
+            if (recipe is null) throw new NotFoundException("Recipe not found");
 
             _dbContext.Recipes.Remove(recipe);
             _dbContext.SaveChanges();
