@@ -10,9 +10,18 @@ using System.Text;
 namespace GymHubAPI.Services
 {
 
+    public class ReturnUserClass
+    {
+        public string Name;
+        public string Token;
+    }
+
     public interface IUserService
     {
-        public void RegisterUser(RegisterUserDto dto); 
+        public void RegisterUser(RegisterUserDto dto);
+        public string GenerateJwt(LoginUserDto dto);
+        public User GetUser(LoginUserDto dto);
+
     }
     public class UserService : IUserService
     {
@@ -31,6 +40,7 @@ namespace GymHubAPI.Services
         {
             var newUser = new User()
             {
+                Name = dto.Name,
                 Email = dto.Email,
             };
 
@@ -41,7 +51,7 @@ namespace GymHubAPI.Services
             _dbContext.SaveChanges();
         }
 
-        public string GenerateJwt(RegisterUserDto dto)
+        public string GenerateJwt(LoginUserDto dto)
         {
             var user = _dbContext.Users.FirstOrDefault(u => u.Email == dto.Email);
 
@@ -74,7 +84,17 @@ namespace GymHubAPI.Services
             var tokenHandler = new JwtSecurityTokenHandler();
 
             return tokenHandler.WriteToken(token);
+        }
 
+        public User GetUser(LoginUserDto dto)
+        {   
+            if (dto == null)
+            {
+                throw new BadRequestException("Invalid user");
+            }
+               
+            var user = _dbContext.Users.FirstOrDefault(u => u.Email == dto.Email);
+            return user;
         }
     }
 }

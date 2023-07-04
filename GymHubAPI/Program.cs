@@ -58,7 +58,6 @@ builder.Services.AddScoped<IRecipeService, RecipeService>();
 
 builder.Services.AddScoped<IWorkoutService, WorkoutService>();
 
-
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 
 var app = builder.Build();

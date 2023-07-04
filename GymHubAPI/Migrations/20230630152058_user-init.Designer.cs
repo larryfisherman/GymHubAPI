@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GymHubAPI.Migrations
 {
     [DbContext(typeof(GymHubDbContext))]
-    [Migration("20230327141550_nullable-user-fields")]
-    partial class nullableuserfields
+    [Migration("20230630152058_user-init")]
+    partial class userinit
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -35,18 +35,24 @@ namespace GymHubAPI.Migrations
                     b.Property<int>("Carbo")
                         .HasColumnType("int");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Fat")
                         .HasColumnType("int");
 
                     b.Property<int>("Kcal")
                         .HasColumnType("int");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("Protein")
                         .HasColumnType("int");
+
+                    b.Property<int>("TimeToBeDone")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -69,6 +75,7 @@ namespace GymHubAPI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PasswordHash")
@@ -81,6 +88,32 @@ namespace GymHubAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("GymHubAPI.Entities.Workout", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Favourite")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Kcal")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TimeToBeDone")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Workouts");
                 });
 #pragma warning restore 612, 618
         }
