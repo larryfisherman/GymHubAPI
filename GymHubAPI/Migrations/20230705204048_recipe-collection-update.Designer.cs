@@ -4,6 +4,7 @@ using GymHubAPI.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GymHubAPI.Migrations
 {
     [DbContext(typeof(GymHubDbContext))]
-    partial class GymHubDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230705204048_recipe-collection-update")]
+    partial class recipecollectionupdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,25 +33,26 @@ namespace GymHubAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("Carbo")
+                    b.Property<int>("Carbo")
                         .HasColumnType("int");
 
                     b.Property<string>("Category")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("Fat")
+                    b.Property<int>("Fat")
                         .HasColumnType("int");
 
-                    b.Property<int?>("Kcal")
+                    b.Property<int>("Kcal")
                         .HasColumnType("int");
 
-                    b.Property<int?>("Protein")
+                    b.Property<int>("Protein")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TimeToBeDone")
+                    b.Property<int>("TimeToBeDone")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
@@ -82,7 +86,7 @@ namespace GymHubAPI.Migrations
 
                     b.HasIndex("RecipeId");
 
-                    b.ToTable("Ingrediens");
+                    b.ToTable("RecipeIngrediens");
                 });
 
             modelBuilder.Entity("GymHubAPI.Entities.RecipeSteps", b =>

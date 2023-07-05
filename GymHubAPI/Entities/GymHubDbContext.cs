@@ -14,6 +14,8 @@ namespace GymHubAPI.Entities
         public DbSet<User> Users { get; set; }
         public DbSet<Recipe> Recipes { get; set; }
         public DbSet<Workout> Workouts { get; set; }
+        public DbSet<RecipeIngrediens> Ingrediens { get; set; }
+        public DbSet<RecipeSteps> RecipeSteps { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

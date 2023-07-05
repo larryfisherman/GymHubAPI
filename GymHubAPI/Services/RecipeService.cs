@@ -2,6 +2,8 @@
 using GymHubAPI.Models;
 using AutoMapper;
 using GymHubAPI.Exceptions;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace GymHubAPI.Services
 {
@@ -10,9 +12,10 @@ namespace GymHubAPI.Services
         IEnumerable<Recipe> GetAllRecipes();
         public void Create(RecipeDto dto);
         public void Delete(int id);
-        RecipeDto GetById(int id);
+        public RecipeDto GetRecipeById(int id);
+        public void Update(int id, RecipeDto dto);
     }
-        
+
     public class RecipeService : IRecipeService
     {
         private readonly GymHubDbContext _dbContext;
@@ -26,7 +29,7 @@ namespace GymHubAPI.Services
 
         public IEnumerable<Recipe> GetAllRecipes()
         {
-             return _dbContext.Recipes.ToList();
+             return _dbContext.Recipes.Include(s => s.Steps).Include(i => i.Ingrediens).ToList();
         }
 
         public void Create(RecipeDto dto)
@@ -46,10 +49,10 @@ namespace GymHubAPI.Services
             _dbContext.SaveChanges();
         }
 
-        public RecipeDto GetById(int id)
+        public RecipeDto GetRecipeById(int id)
         {
             var recipe = _dbContext
-              .Recipes
+              .Recipes.Include(s => s.Steps).Include(i => i.Ingrediens)
               .FirstOrDefault(r => r.Id == id);
 
             if (recipe is null) throw new NotFoundException("Recipe not found");
@@ -58,5 +61,29 @@ namespace GymHubAPI.Services
 
             return result;
         }
+
+        public void Update(int id, RecipeDto dto)
+        {
+            var recipe = _dbContext
+                .Recipes
+                .FirstOrDefault(r => r.Id == id);
+
+            if (recipe is null) throw new NotFoundException("Recipe not found");
+
+            recipe.Title = dto.Title;
+            recipe.Description = dto.Description;
+            recipe.Protein = dto.Protein;
+            recipe.Fat = dto.Fat;
+            recipe.Carbo = dto.Carbo;
+            recipe.Kcal = dto.Kcal;
+            recipe.TimeToBeDone = dto.TimeToBeDone;
+            recipe.Category = dto.Category;
+            recipe.Ingrediens = dto.Ingrediens;
+            recipe.Steps = dto.Steps;
+
+
+            _dbContext.SaveChanges();
+        }
+
     }
 }
