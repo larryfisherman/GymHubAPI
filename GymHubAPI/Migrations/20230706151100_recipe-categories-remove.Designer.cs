@@ -4,6 +4,7 @@ using GymHubAPI.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GymHubAPI.Migrations
 {
     [DbContext(typeof(GymHubDbContext))]
-    partial class GymHubDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230706151100_recipe-categories-remove")]
+    partial class recipecategoriesremove
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -42,10 +45,6 @@ namespace GymHubAPI.Migrations
                     b.Property<int?>("Fat")
                         .HasColumnType("int");
 
-                    b.Property<string>("ImageName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int?>("Kcal")
                         .HasColumnType("int");
 
@@ -62,55 +61,6 @@ namespace GymHubAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Recipes");
-                });
-
-            modelBuilder.Entity("GymHubAPI.Entities.RecipeCategories", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("RecipeCategories");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Title = "All dishes"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Title = "Meat dishes"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Title = "Salads"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Title = "Seafood"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Title = "Soups"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Title = "Desserts"
-                        });
                 });
 
             modelBuilder.Entity("GymHubAPI.Entities.RecipeIngrediens", b =>

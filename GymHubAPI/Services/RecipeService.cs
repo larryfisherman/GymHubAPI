@@ -14,22 +14,32 @@ namespace GymHubAPI.Services
         public void Delete(int id);
         public RecipeDto GetRecipeById(int id);
         public void Update(int id, RecipeDto dto);
+        public IEnumerable<RecipeCategories> GetAllCategories();
+
     }
 
     public class RecipeService : IRecipeService
     {
         private readonly GymHubDbContext _dbContext;
         private readonly IMapper _mapper;
+        private readonly IWebHostEnvironment _hostEnvironment;
 
-        public RecipeService(GymHubDbContext dbContext, IMapper mapper)
+
+        public RecipeService(GymHubDbContext dbContext, IMapper mapper, IWebHostEnvironment hostEnvironment)
         {
             _dbContext = dbContext;
             _mapper = mapper;
+            _hostEnvironment = hostEnvironment;
+        }
+
+        public IEnumerable<RecipeCategories> GetAllCategories()
+        {
+            return _dbContext.RecipeCategories.ToList();
         }
 
         public IEnumerable<Recipe> GetAllRecipes()
         {
-             return _dbContext.Recipes.Include(s => s.Steps).Include(i => i.Ingrediens).ToList();
+             return _dbContext.Recipes.ToList();
         }
 
         public void Create(RecipeDto dto)

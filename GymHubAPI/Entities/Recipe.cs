@@ -1,4 +1,6 @@
-﻿namespace GymHubAPI.Entities
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace GymHubAPI.Entities
 {
     public class Recipe
     {
@@ -13,6 +15,9 @@
         public string? Category { get; set; }
         public ICollection<RecipeIngrediens>? Ingrediens { get; set; }
         public ICollection<RecipeSteps>? Steps { get; set; }
+        public string ImageName { get; set; }
+        [NotMapped]
+        public  IFormFile ImageFile { get; set; }
 
     }
 }

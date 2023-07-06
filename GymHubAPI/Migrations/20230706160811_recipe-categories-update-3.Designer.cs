@@ -4,6 +4,7 @@ using GymHubAPI.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GymHubAPI.Migrations
 {
     [DbContext(typeof(GymHubDbContext))]
-    partial class GymHubDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230706160811_recipe-categories-update-3")]
+    partial class recipecategoriesupdate3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -42,10 +45,6 @@ namespace GymHubAPI.Migrations
                     b.Property<int?>("Fat")
                         .HasColumnType("int");
 
-                    b.Property<string>("ImageName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int?>("Kcal")
                         .HasColumnType("int");
 
@@ -72,11 +71,16 @@ namespace GymHubAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("RecipeId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("RecipeId");
 
                     b.ToTable("RecipeCategories");
 
@@ -221,6 +225,13 @@ namespace GymHubAPI.Migrations
                     b.ToTable("Workouts");
                 });
 
+            modelBuilder.Entity("GymHubAPI.Entities.RecipeCategories", b =>
+                {
+                    b.HasOne("GymHubAPI.Entities.Recipe", null)
+                        .WithMany("Categories")
+                        .HasForeignKey("RecipeId");
+                });
+
             modelBuilder.Entity("GymHubAPI.Entities.RecipeIngrediens", b =>
                 {
                     b.HasOne("GymHubAPI.Entities.Recipe", null)
@@ -237,6 +248,8 @@ namespace GymHubAPI.Migrations
 
             modelBuilder.Entity("GymHubAPI.Entities.Recipe", b =>
                 {
+                    b.Navigation("Categories");
+
                     b.Navigation("Ingrediens");
 
                     b.Navigation("Steps");
