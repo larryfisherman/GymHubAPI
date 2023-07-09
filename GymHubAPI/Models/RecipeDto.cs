@@ -18,7 +18,8 @@ namespace GymHubAPI.Models
         public string? Category { get; set; }
         public ICollection<RecipeIngrediens>? Ingrediens { get; set; }
         public ICollection<RecipeSteps>? Steps { get; set; }
-        public string ImageName { get; set; }
-        public IFormFile ImageFile { get; set; }
+        public ICollection<RecipeCategories>? Categories { get; set; }
+        public string? ImageName { get; set; }
+        public byte[]? ImageFile { get; set; }
     }
 }

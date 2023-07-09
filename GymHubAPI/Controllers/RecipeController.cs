@@ -19,12 +19,12 @@ namespace GymHubAPI.Controllers
             _dbContext = dbContext;
             _hostEnvironment = hostEnvironment;
         }
-        [HttpGet("categories")]
-        public ActionResult<IEnumerable<RecipeCategories>> GetAllCategories()
-        {
-            var categories = _recipeService.GetAllCategories();
-            return Ok(categories);
-        }
+        //[HttpGet("categories")]
+        //public ActionResult<IEnumerable<RecipeCategories>> GetAllCategories()
+        //{
+        //    var categories = _recipeService.GetAllCategories();
+        //    return Ok(categories);
+        //}
 
         [HttpGet]
         public ActionResult<IEnumerable<RecipeDto>> GetAllRecipes()
@@ -44,7 +44,7 @@ namespace GymHubAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<RecipeDto>> CreateRecipe([FromBody] RecipeDto dto)
         {
-            dto.ImageName = await SaveImage(dto.ImageFile);
+            //dto.ImageName = await SaveImage(dto.ImageFile);
             _recipeService.Create(dto);
             return Ok();
         }
@@ -64,21 +64,39 @@ namespace GymHubAPI.Controllers
              return Ok();
         }
 
-        [NonAction]
-        public async Task<string> SaveImage(IFormFile imageFile)
+        //[NonAction]
+        //public async Task<string> SaveImage(IFormFile imageFile)
+        //{
+        //    string imageName = new String(Path.GetFileNameWithoutExtension(imageFile.FileName).Take(10).ToArray()).Replace(' ', '-');
+
+        //    imageName = imageName + DateTime.Now.ToString("yymmssfff") + Path.GetExtension(imageFile.FileName);
+
+        //    var imagePath = Path.Combine(_hostEnvironment.ContentRootPath, "Images", imageName);
+
+        //    using (var fileStream = new FileStream(imagePath, FileMode.Create))
+        //    {
+        //        await imageFile.CopyToAsync(fileStream);
+        //    }
+
+        //    return imageName;
+        //}
+
+        [HttpPost("upload")]
+        public IActionResult Upload(IFormFile file)
         {
-            string imageName = new String(Path.GetFileNameWithoutExtension(imageFile.FileName).Take(10).ToArray()).Replace(' ', '-');
-
-            imageName = imageName + DateTime.Now.ToString("yymmssfff") + Path.GetExtension(imageFile.FileName);
-
-            var imagePath = Path.Combine(_hostEnvironment.ContentRootPath, "Images", imageName);
-
-            using (var fileStream = new FileStream(imagePath, FileMode.Create))
+            if (file == null || file.Length == 0)
             {
-                await imageFile.CopyToAsync(fileStream);
+                return BadRequest("No file uploaded.");
             }
 
-            return imageName;
+            // Process the uploaded file
+            using (var memoryStream = new MemoryStream())
+            {
+                file.CopyTo(memoryStream);
+                // Save the file or perform any additional processing
+
+                return Ok(new { message = "File uploaded successfully." });
+            }
         }
 
     }

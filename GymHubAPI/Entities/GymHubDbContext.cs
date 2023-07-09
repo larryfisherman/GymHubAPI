@@ -14,9 +14,8 @@ namespace GymHubAPI.Entities
         public DbSet<User> Users { get; set; }
         public DbSet<Recipe> Recipes { get; set; }
         public DbSet<Workout> Workouts { get; set; }
-        public DbSet<RecipeIngrediens> Ingrediens { get; set; }
+        public DbSet<RecipeIngrediens> RecipeIngrediens { get; set; }
         public DbSet<RecipeSteps> RecipeSteps { get; set; }
-        public DbSet<RecipeCategories> RecipeCategories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -25,14 +24,14 @@ namespace GymHubAPI.Entities
             account.Property(a => a.Email).IsRequired();
             account.Property(a => a.PasswordHash).IsRequired();
 
-            modelBuilder.Entity<RecipeCategories>().HasData(
-                new RecipeCategories { Id = 1, Title = "All dishes"},
-                new RecipeCategories { Id = 2, Title = "Meat dishes" },
-                new RecipeCategories { Id = 3, Title = "Salads" },
-                new RecipeCategories { Id = 4, Title = "Seafood" },
-                new RecipeCategories { Id = 5, Title = "Soups" },
-                new RecipeCategories { Id = 6, Title = "Desserts" }
-               );
+            //modelBuilder.Entity<RecipeCategories>().HasData(
+            //    new RecipeCategories { Id = 1, Title = "All dishes"},
+            //    new RecipeCategories { Id = 2, Title = "Meat dishes" },
+            //    new RecipeCategories { Id = 3, Title = "Salads" },
+            //    new RecipeCategories { Id = 4, Title = "Seafood" },
+            //    new RecipeCategories { Id = 5, Title = "Soups" },
+            //    new RecipeCategories { Id = 6, Title = "Desserts" }
+            //   );
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

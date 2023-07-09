@@ -14,7 +14,7 @@ namespace GymHubAPI.Services
         public void Delete(int id);
         public RecipeDto GetRecipeById(int id);
         public void Update(int id, RecipeDto dto);
-        public IEnumerable<RecipeCategories> GetAllCategories();
+        //public IEnumerable<RecipeCategories> GetAllCategories();
 
     }
 
@@ -32,10 +32,10 @@ namespace GymHubAPI.Services
             _hostEnvironment = hostEnvironment;
         }
 
-        public IEnumerable<RecipeCategories> GetAllCategories()
-        {
-            return _dbContext.RecipeCategories.ToList();
-        }
+        //public IEnumerable<RecipeCategories> GetAllCategories()
+        //{
+        //    return _dbContext.RecipeCategories.ToList();
+        //}
 
         public IEnumerable<Recipe> GetAllRecipes()
         {

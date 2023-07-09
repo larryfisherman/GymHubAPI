@@ -1,6 +1,7 @@
 using GymHubAPI;
 using GymHubAPI.Entities;
 using GymHubAPI.Services;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -15,6 +16,7 @@ var configuration = provider.GetService<IConfiguration>();
 var authenticationSettings = new AuthenticationSettings();
 
 configuration.GetSection("Authentication").Bind(authenticationSettings);
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -31,6 +33,12 @@ builder.Services.AddCors(options =>
             .AllowAnyHeader()
             .AllowAnyOrigin()
         );
+});
+
+
+builder.Services.Configure<IISServerOptions>(options =>
+{
+    options.MaxRequestBodySize = int.MaxValue;
 });
 
 builder.Services.AddSingleton(authenticationSettings);
