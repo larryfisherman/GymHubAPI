@@ -2,6 +2,7 @@
 using GymHubAPI.Models;
 using AutoMapper;
 using GymHubAPI.Exceptions;
+using Microsoft.EntityFrameworkCore;
 
 namespace GymHubAPI.Services
 {
@@ -10,7 +11,9 @@ namespace GymHubAPI.Services
         IEnumerable<Workout> GetAllWorkouts();
         public void Create(WorkoutDto dto);
         public void Delete(int id);
-        WorkoutDto GetById(int id);
+        public WorkoutDto GetWorkoutById(int id);
+        public void Update(int id, WorkoutDto dto);
+
     }
 
     public class WorkoutService : IWorkoutService
@@ -32,6 +35,7 @@ namespace GymHubAPI.Services
         public void Create(WorkoutDto dto)
         {
             var workout = _mapper.Map<Workout>(dto);
+            workout.CreatedDate = DateTime.Now;
             _dbContext.Workouts.Add(workout);
             _dbContext.SaveChanges();
         }
@@ -46,10 +50,10 @@ namespace GymHubAPI.Services
             _dbContext.SaveChanges();
         }
 
-        public WorkoutDto GetById(int id)
+        public WorkoutDto GetWorkoutById(int id)
         {
             var workout = _dbContext
-              .Workouts
+              .Workouts.Include(w => w.Exercises)
               .FirstOrDefault(r => r.Id == id);
 
             if (workout is null) throw new NotFoundException("Workout not found");
@@ -57,6 +61,25 @@ namespace GymHubAPI.Services
             var result = _mapper.Map<WorkoutDto>(workout);
 
             return result;
+        }
+
+        public void Update(int id, WorkoutDto dto)
+        {
+            var workout = _dbContext
+                .Workouts
+                .FirstOrDefault(w => w.Id == id);
+
+            if (workout is null) throw new NotFoundException("Workout not found");
+
+            workout.Title = dto.Title;
+            workout.Description = dto.Description;
+            workout.Author = dto.Author;
+            workout.CreatedDate = dto.CreatedDate;
+            workout.Kcal = dto.Kcal;
+            workout.TimeToBeDone = dto.TimeToBeDone;
+            workout.Exercises = dto.Exercises;
+
+            _dbContext.SaveChanges();
         }
     }
 }

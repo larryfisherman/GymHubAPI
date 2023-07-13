@@ -29,7 +29,7 @@ namespace GymHubAPI.Controllers
         [HttpGet("{id}")]
         public ActionResult<WorkoutDto> GetById([FromRoute] int id)
         {
-            WorkoutDto workout = _workoutService.GetById(id);
+            WorkoutDto workout = _workoutService.GetWorkoutById(id);
             return Ok(workout);
         }
 
@@ -45,6 +45,14 @@ namespace GymHubAPI.Controllers
         {
             _workoutService.Delete(id);
             return Ok("Workout removed");
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult UpdateWorkout([FromRoute] int id, [FromBody] WorkoutDto dto)
+        {
+            _workoutService.Update(id, dto);
+
+            return Ok();
         }
 
 
