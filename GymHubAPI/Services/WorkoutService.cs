@@ -42,7 +42,7 @@ namespace GymHubAPI.Services
 
         public void Delete(int id)
         {
-            var workout = _dbContext.Workouts.FirstOrDefault(r => r.Id == id);
+            var workout = _dbContext.Workouts.FirstOrDefault(r => r.WorkoutId == id);
 
             if (workout is null) throw new NotFoundException("Workout not found");
 
@@ -53,8 +53,10 @@ namespace GymHubAPI.Services
         public WorkoutDto GetWorkoutById(int id)
         {
             var workout = _dbContext
-              .Workouts.Include(w => w.Exercises)
-              .FirstOrDefault(r => r.Id == id);
+              .Workouts
+              .Include(w => w.WorkoutExercises)
+              .Include(we => we.WorkoutExercises)
+              .FirstOrDefault(w => w.WorkoutId  == id);
 
             if (workout is null) throw new NotFoundException("Workout not found");
 
@@ -67,7 +69,7 @@ namespace GymHubAPI.Services
         {
             var workout = _dbContext
                 .Workouts
-                .FirstOrDefault(w => w.Id == id);
+                .FirstOrDefault(w => w.WorkoutId == id);
 
             if (workout is null) throw new NotFoundException("Workout not found");
 
@@ -77,7 +79,7 @@ namespace GymHubAPI.Services
             workout.CreatedDate = dto.CreatedDate;
             workout.Kcal = dto.Kcal;
             workout.TimeToBeDone = dto.TimeToBeDone;
-            workout.Exercises = dto.Exercises;
+            workout.WorkoutExercises = dto.WorkoutExercises;
 
             _dbContext.SaveChanges();
         }
