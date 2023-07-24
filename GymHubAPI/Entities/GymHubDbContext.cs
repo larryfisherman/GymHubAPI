@@ -15,6 +15,7 @@ namespace GymHubAPI.Entities
         public DbSet<Recipe> Recipes { get; set; }
         public DbSet<Workout> Workouts { get; set; }
         public DbSet<Exercise> Exercises { get; set; }
+        public DbSet<WorkoutExercises> WorkoutsExercises { get;set; }
         public DbSet<RecipeIngrediens> RecipeIngrediens { get; set; }
         public DbSet<RecipeSteps> RecipeSteps { get; set; }
 
@@ -25,8 +26,9 @@ namespace GymHubAPI.Entities
             account.Property(a => a.Email).IsRequired();
             account.Property(a => a.PasswordHash).IsRequired();
 
-            modelBuilder.Entity<Workout>().HasMany(w => w.Exercises).WithMany(w => w.Workouts).UsingEntity(j => j.ToTable("WorkoutExercises"));
+            modelBuilder.Entity<WorkoutExercises>().HasOne(w => w.Workout).WithMany(w => w.WorkoutExercises).HasForeignKey(w => w.WorkoutId);
 
+            modelBuilder.Entity<WorkoutExercises>().HasOne(e => e.Exercise).WithMany(w => w.WorkoutExercises).HasForeignKey(w => w.ExerciseId);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

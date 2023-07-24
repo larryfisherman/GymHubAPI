@@ -11,6 +11,7 @@ namespace GymHubAPI.Models
         public string? Description { get; set; }
         public int? Kcal { get; set; }
         public int? TimeToBeDone { get; set; }
-        public ICollection<WorkoutExercises>? WorkoutExercises { get; set; }
+
+        public List<WorkoutExercises>? WorkoutExercises { get; set; }
     }
 }

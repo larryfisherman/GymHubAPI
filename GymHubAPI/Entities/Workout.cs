@@ -10,7 +10,6 @@
         public int? Kcal { get; set; }
         public int? TimeToBeDone { get; set; }
 
-        public ICollection<Exercise>? Exercises { get; set;}
-
+        public List<WorkoutExercises>? WorkoutExercises { get; set;}
     }
 }

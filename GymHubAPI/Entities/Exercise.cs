@@ -7,7 +7,6 @@
         public int Sets { get; set; }
         public int Repeats { get; set; }
 
-        public ICollection<Workout> Workouts { get; set; }
-
+        public List<WorkoutExercises>? WorkoutExercises { get; set; }
     }
 }

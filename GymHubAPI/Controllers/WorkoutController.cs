@@ -29,7 +29,7 @@ namespace GymHubAPI.Controllers
         [HttpGet("{id}")]
         public ActionResult<WorkoutDto> GetById([FromRoute] int id)
         {
-            WorkoutDto workout = _workoutService.GetWorkoutById(id);
+            object workout = _workoutService.GetWorkoutById(id);
             return Ok(workout);
         }
 

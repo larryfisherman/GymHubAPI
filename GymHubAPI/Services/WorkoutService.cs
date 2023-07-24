@@ -11,7 +11,7 @@ namespace GymHubAPI.Services
         IEnumerable<Workout> GetAllWorkouts();
         public void Create(WorkoutDto dto);
         public void Delete(int id);
-        public WorkoutDto GetWorkoutById(int id);
+        public object GetWorkoutById(int id);
         public void Update(int id, WorkoutDto dto);
 
     }
@@ -50,19 +50,37 @@ namespace GymHubAPI.Services
             _dbContext.SaveChanges();
         }
 
-        public WorkoutDto GetWorkoutById(int id)
+        public object GetWorkoutById(int id)
         {
             var workout = _dbContext
               .Workouts
-              .Include(w => w.WorkoutExercises)
-              .Include(we => we.WorkoutExercises)
               .FirstOrDefault(w => w.WorkoutId  == id);
+
+            var exercises = GetExercisesByWorkoutId(id);
 
             if (workout is null) throw new NotFoundException("Workout not found");
 
             var result = _mapper.Map<WorkoutDto>(workout);
 
-            return result;
+            return new
+            {
+                workout = workout,
+                exercises = exercises,
+            };
+        }
+
+        private List<Exercise> GetExercisesByWorkoutId(int workoutId)
+        {
+            var exerciseIds = _dbContext.WorkoutsExercises
+                .Where(we => we.WorkoutId == workoutId)
+                .Select(we => we.ExerciseId)
+                .ToList();
+
+            var exercises = _dbContext.Exercises
+                .Where(e => exerciseIds.Contains(e.ExerciseId))
+                .ToList();
+
+            return exercises;
         }
 
         public void Update(int id, WorkoutDto dto)
@@ -79,7 +97,7 @@ namespace GymHubAPI.Services
             workout.CreatedDate = dto.CreatedDate;
             workout.Kcal = dto.Kcal;
             workout.TimeToBeDone = dto.TimeToBeDone;
-            workout.WorkoutExercises = dto.WorkoutExercises;
+            //workout.WorkoutExercises = dto.WorkoutExercises;
 
             _dbContext.SaveChanges();
         }
