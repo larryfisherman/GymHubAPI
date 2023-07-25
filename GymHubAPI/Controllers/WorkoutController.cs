@@ -48,9 +48,9 @@ namespace GymHubAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateWorkout([FromRoute] int id, [FromBody] WorkoutDto dto)
+        public IActionResult UpdateWorkout([FromRoute] int id, [FromBody] WorkoutDto dto, List<WorkoutExercisesDto> exercises)
         {
-            _workoutService.Update(id, dto);
+            _workoutService.Update(id, dto, exercises);
 
             return Ok();
         }

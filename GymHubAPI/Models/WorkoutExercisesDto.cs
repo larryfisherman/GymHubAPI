@@ -1,14 +1,12 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace GymHubAPI.Entities
+namespace GymHubAPI.Models
 {
-    public class Exercise
+    public class WorkoutExercisesDto
     {
+        [JsonPropertyName("id")]
         public int ExerciseId { get; set; }
-        public string Title { get; set; }
         public int Sets { get; set; }
         public int Repeats { get; set; }
-
-        public List<WorkoutExercises>? WorkoutExercises { get; set; }
     }
 }

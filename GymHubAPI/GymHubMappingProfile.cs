@@ -13,6 +13,10 @@ namespace GymHubAPI
 
             CreateMap<Workout, WorkoutDto>();
             CreateMap<WorkoutDto, Workout>();
+
+            CreateMap<WorkoutExercises, WorkoutExercisesDto>();
+            CreateMap<WorkoutExercisesDto, WorkoutExercises>();
+
         }
     }
 }

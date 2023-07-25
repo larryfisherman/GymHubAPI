@@ -12,7 +12,7 @@ namespace GymHubAPI.Services
         public void Create(WorkoutDto dto);
         public void Delete(int id);
         public object GetWorkoutById(int id);
-        public void Update(int id, WorkoutDto dto);
+        public void Update(int id, WorkoutDto dto, List<WorkoutExercisesDto> exercises);
 
     }
 
@@ -54,7 +54,7 @@ namespace GymHubAPI.Services
         {
             var workout = _dbContext
               .Workouts
-              .FirstOrDefault(w => w.WorkoutId  == id);
+              .FirstOrDefault(w => w.WorkoutId == id);
 
             var exercises = GetExercisesByWorkoutId(id);
 
@@ -69,21 +69,8 @@ namespace GymHubAPI.Services
             };
         }
 
-        private List<Exercise> GetExercisesByWorkoutId(int workoutId)
-        {
-            var exerciseIds = _dbContext.WorkoutsExercises
-                .Where(we => we.WorkoutId == workoutId)
-                .Select(we => we.ExerciseId)
-                .ToList();
 
-            var exercises = _dbContext.Exercises
-                .Where(e => exerciseIds.Contains(e.ExerciseId))
-                .ToList();
-
-            return exercises;
-        }
-
-        public void Update(int id, WorkoutDto dto)
+        public void Update(int id, WorkoutDto dto, List<WorkoutExercisesDto> exercises)
         {
             var workout = _dbContext
                 .Workouts
@@ -97,9 +84,68 @@ namespace GymHubAPI.Services
             workout.CreatedDate = dto.CreatedDate;
             workout.Kcal = dto.Kcal;
             workout.TimeToBeDone = dto.TimeToBeDone;
-            //workout.WorkoutExercises = dto.WorkoutExercises;
+
+            AddExercisesToWorkout(id, exercises);
 
             _dbContext.SaveChanges();
+        }
+
+
+        private void AddExercisesToWorkout(int workoutId, List<WorkoutExercisesDto> exercises)
+        {
+            var workout = _dbContext.Workouts.Find(workoutId);
+
+            if (workout is null) throw new NotFoundException("Workout not found");
+
+            if (exercises == null || exercises.Count == 0)
+            {
+                var exercisesToRemove = _dbContext.WorkoutsExercises
+                    .Where(we => we.WorkoutId == workout.WorkoutId)
+                    .ToList();
+
+                _dbContext.WorkoutsExercises.RemoveRange(exercisesToRemove);
+            }
+            else
+            {
+                var existingExercises = _dbContext.WorkoutsExercises
+                    .Where(we => we.WorkoutId == workout.WorkoutId)
+                    .ToList();
+
+                foreach (var exercise in exercises)
+                {
+                    var existingExercise = existingExercises.FirstOrDefault(we => we.ExerciseId == exercise.ExerciseId);
+
+                    if (existingExercise == null)
+                    {
+                        var workoutExercise = new WorkoutExercises
+                        {
+                            WorkoutId = workout.WorkoutId,
+                            ExerciseId = exercise.ExerciseId,
+                            Sets = exercise.Sets,
+                            Repeats = exercise.Repeats,
+                        };
+
+                        _dbContext.WorkoutsExercises.Add(workoutExercise);
+                    }
+                    else
+                    {
+                        existingExercise.Sets = exercise.Sets;
+                        existingExercise.Repeats = exercise.Repeats;
+                    }
+                }
+            }
+
+            _dbContext.SaveChanges();
+        }
+
+        private List<WorkoutExercisesDto> GetExercisesByWorkoutId(int workoutId)
+        {
+            var exerciseIds = _dbContext.WorkoutsExercises
+                .Where(we => we.WorkoutId == workoutId)
+                .ToList();
+
+            var exercises = _mapper.Map<List<WorkoutExercisesDto>>(exerciseIds);
+            return exercises;
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace GymHubAPI.Entities
+﻿using System.Text.Json.Serialization;
+
+namespace GymHubAPI.Entities
 {
     public class Workout
     {
@@ -10,6 +12,7 @@
         public int? Kcal { get; set; }
         public int? TimeToBeDone { get; set; }
 
+        [JsonIgnore]
         public List<WorkoutExercises>? WorkoutExercises { get; set;}
     }
 }
