@@ -12,7 +12,7 @@ namespace GymHubAPI.Services
         public void Create(WorkoutDto dto);
         public void Delete(int id);
         public object GetWorkoutById(int id);
-        public void Update(int id, WorkoutDto dto, List<WorkoutExercisesDto> exercises);
+        public void Update(int id, WorkoutDto dto);
 
     }
 
@@ -70,7 +70,7 @@ namespace GymHubAPI.Services
         }
 
 
-        public void Update(int id, WorkoutDto dto, List<WorkoutExercisesDto> exercises)
+        public void Update(int id, WorkoutDto dto)
         {
             var workout = _dbContext
                 .Workouts
@@ -85,7 +85,7 @@ namespace GymHubAPI.Services
             workout.Kcal = dto.Kcal;
             workout.TimeToBeDone = dto.TimeToBeDone;
 
-            AddExercisesToWorkout(id, exercises);
+            AddExercisesToWorkout(id, dto.WorkoutExercises);
 
             _dbContext.SaveChanges();
         }
@@ -96,20 +96,12 @@ namespace GymHubAPI.Services
             var workout = _dbContext.Workouts.Find(workoutId);
 
             if (workout is null) throw new NotFoundException("Workout not found");
-
-            if (exercises == null || exercises.Count == 0)
-            {
-                var exercisesToRemove = _dbContext.WorkoutsExercises
-                    .Where(we => we.WorkoutId == workout.WorkoutId)
-                    .ToList();
-
-                _dbContext.WorkoutsExercises.RemoveRange(exercisesToRemove);
-            }
-            else
-            {
+   
                 var existingExercises = _dbContext.WorkoutsExercises
                     .Where(we => we.WorkoutId == workout.WorkoutId)
                     .ToList();
+
+               if(existingExercises.Count > 0) RemoveExercisesConnectedToWorkout(workoutId, exercises);
 
                 foreach (var exercise in exercises)
                 {
@@ -133,9 +125,32 @@ namespace GymHubAPI.Services
                         existingExercise.Repeats = exercise.Repeats;
                     }
                 }
-            }
 
             _dbContext.SaveChanges();
+        }
+
+        private void RemoveExercisesConnectedToWorkout(int workoutId, List<WorkoutExercisesDto> exercises)
+        {
+            var receivedExerciseIds = exercises.Select(e => e.ExerciseId).ToList();
+            var workout = _dbContext.Workouts.Find(workoutId);
+
+
+            if (receivedExerciseIds == null || receivedExerciseIds.Count == 0)
+            {
+                var workoutExercisesToRemove = _dbContext.WorkoutsExercises
+                    .Where(we => we.WorkoutId == workoutId)
+                    .ToList();
+
+                _dbContext.WorkoutsExercises.RemoveRange(workoutExercisesToRemove);
+            }
+            else
+            {
+                var exercisesToRemove = workout.WorkoutExercises
+                    .Where(we => !receivedExerciseIds.Contains(we.ExerciseId))
+                    .ToList();
+
+                _dbContext.WorkoutsExercises.RemoveRange(exercisesToRemove);
+            }
         }
 
         private List<WorkoutExercisesDto> GetExercisesByWorkoutId(int workoutId)

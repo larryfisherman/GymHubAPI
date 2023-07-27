@@ -7,7 +7,7 @@ namespace GymHubAPI.Controllers
 {
     [Route("api/workouts")]
     [ApiController]
-    public class WorkoutController: ControllerBase
+    public class WorkoutController : ControllerBase
     {
         private readonly IWorkoutService _workoutService;
         private readonly GymHubDbContext _dbContext;
@@ -48,9 +48,9 @@ namespace GymHubAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateWorkout([FromRoute] int id, [FromBody] WorkoutDto dto, List<WorkoutExercisesDto> exercises)
+        public IActionResult UpdateWorkout([FromRoute] int id, [FromBody] WorkoutDto dto)
         {
-            _workoutService.Update(id, dto, exercises);
+            _workoutService.Update(id, dto);
 
             return Ok();
         }
