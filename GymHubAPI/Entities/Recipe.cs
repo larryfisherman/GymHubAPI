@@ -13,12 +13,8 @@ namespace GymHubAPI.Entities
         public int? Kcal { get; set; }
         public int? TimeToBeDone { get; set; }
         public string? Category { get; set; }
-        public ICollection<RecipeIngrediens>? Ingrediens { get; set; }
-        public ICollection<RecipeSteps>? Steps { get; set; }
-        [NotMapped]
-        public ICollection<RecipeCategories>? Categories { get; set; }
-        public string? ImageName { get; set; }
-        public  byte[]? ImageFile { get; set; }
+        public List<RecipeIngrediens>? RecipeIngrediens { get; set; }
+        public List<RecipeSteps>? RecipeSteps { get; set; }
 
     }
 }

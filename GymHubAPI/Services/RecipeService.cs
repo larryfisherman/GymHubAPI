@@ -62,7 +62,7 @@ namespace GymHubAPI.Services
         public RecipeDto GetRecipeById(int id)
         {
             var recipe = _dbContext
-              .Recipes.Include(s => s.Steps).Include(i => i.Ingrediens)
+              .Recipes.Include(s => s.RecipeSteps).Include(i => i.RecipeIngrediens)
               .FirstOrDefault(r => r.Id == id);
 
             if (recipe is null) throw new NotFoundException("Recipe not found");
@@ -88,9 +88,46 @@ namespace GymHubAPI.Services
             recipe.Kcal = dto.Kcal;
             recipe.TimeToBeDone = dto.TimeToBeDone;
             recipe.Category = dto.Category;
-            recipe.Ingrediens = dto.Ingrediens;
-            recipe.Steps = dto.Steps;
+            recipe.RecipeIngrediens = dto.RecipeIngrediens;
+            recipe.RecipeSteps = dto.RecipeSteps;
 
+
+            _dbContext.SaveChanges();
+        }
+
+        private void AddIngrediensToRecipe(int recipeId, List<RecipeIngrediens> ingrediens)
+        {
+            var recipe = _dbContext.Recipes.Find(recipeId);
+
+            if (recipe is null) throw new NotFoundException("Workout not found");
+
+            var existingRecipes = _dbContext.WorkoutsExercises
+                .Where(re => re.Id)
+                .ToList();
+
+            //if (existingRecipes.Count > 0) RemoveExercisesConnectedToWorkout(recipeId, exercises);
+
+            foreach (var ingredient in ingrediens)
+            {
+                var existingRecipe = existingRecipes.FirstOrDefault(we => we.RecipeId);
+
+                if (existingRecipe == null)
+                {
+                    var recipeIngredients = new RecipeIngrediens
+                    {
+                        RecipeId = ingredient.RecipeId,
+                        Amount = ingredient.Amount,
+                        Name = ingredient.Name,
+                    };
+
+                    _dbContext.WorkoutsExercises.Add(recipeIngredients);
+                }
+                else
+                {
+                    existingRecipe.Name = ingredient.Name;
+                    existingRecipe.Amount = ingredient.Amount;
+                }
+            }
 
             _dbContext.SaveChanges();
         }

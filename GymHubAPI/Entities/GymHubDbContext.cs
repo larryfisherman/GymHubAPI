@@ -29,6 +29,11 @@ namespace GymHubAPI.Entities
             modelBuilder.Entity<WorkoutExercises>().HasOne(w => w.Workout).WithMany(w => w.WorkoutExercises).HasForeignKey(w => w.WorkoutId);
 
             modelBuilder.Entity<WorkoutExercises>().HasOne(e => e.Exercise).WithMany(w => w.WorkoutExercises).HasForeignKey(w => w.ExerciseId);
+
+            modelBuilder.Entity<RecipeIngrediens>().HasOne(w => w.Recipe).WithMany(ri => ri.RecipeIngrediens).HasForeignKey(r => r.RecipeId);
+
+            modelBuilder.Entity<RecipeSteps>().HasOne(w => w.Recipe).WithMany(ri => ri.RecipeSteps).HasForeignKey(r => r.RecipeId);
+
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
