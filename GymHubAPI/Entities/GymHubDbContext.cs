@@ -16,7 +16,7 @@ namespace GymHubAPI.Entities
         public DbSet<Workout> Workouts { get; set; }
         public DbSet<Exercise> Exercises { get; set; }
         public DbSet<WorkoutExercises> WorkoutsExercises { get;set; }
-        public DbSet<RecipeIngrediens> RecipeIngrediens { get; set; }
+        public DbSet<RecipeIngredients> RecipeIngredients { get; set; }
         public DbSet<RecipeSteps> RecipeSteps { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -30,7 +30,7 @@ namespace GymHubAPI.Entities
 
             modelBuilder.Entity<WorkoutExercises>().HasOne(e => e.Exercise).WithMany(w => w.WorkoutExercises).HasForeignKey(w => w.ExerciseId);
 
-            modelBuilder.Entity<RecipeIngrediens>().HasOne(w => w.Recipe).WithMany(ri => ri.RecipeIngrediens).HasForeignKey(r => r.RecipeId);
+            modelBuilder.Entity<RecipeIngredients>().HasOne(w => w.Recipe).WithMany(ri => ri.RecipeIngredients).HasForeignKey(r => r.RecipeId);
 
             modelBuilder.Entity<RecipeSteps>().HasOne(w => w.Recipe).WithMany(ri => ri.RecipeSteps).HasForeignKey(r => r.RecipeId);
 

@@ -5,18 +5,13 @@
 namespace GymHubAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class recipeinit2 : Migration
+    public partial class nullabletitle : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.RenameColumn(
-                name: "Time",
-                table: "Recipes",
-                newName: "TimeToBeDone");
-
             migrationBuilder.AlterColumn<string>(
-                name: "Description",
+                name: "Title",
                 table: "Recipes",
                 type: "nvarchar(max)",
                 nullable: true,
@@ -27,13 +22,8 @@ namespace GymHubAPI.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.RenameColumn(
-                name: "TimeToBeDone",
-                table: "Recipes",
-                newName: "Time");
-
             migrationBuilder.AlterColumn<string>(
-                name: "Description",
+                name: "Title",
                 table: "Recipes",
                 type: "nvarchar(max)",
                 nullable: false,

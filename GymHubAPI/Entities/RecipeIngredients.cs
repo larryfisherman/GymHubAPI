@@ -1,6 +1,6 @@
 ﻿namespace GymHubAPI.Entities
 {
-    public class RecipeIngrediens
+    public class RecipeIngredients
     {
         public int Id { get; set; }
         public int Amount { get; set; }

@@ -47,11 +47,11 @@ namespace GymHubAPI.Migrations
 
             modelBuilder.Entity("GymHubAPI.Entities.Recipe", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("RecipeId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RecipeId"));
 
                     b.Property<int?>("Carbo")
                         .HasColumnType("int");
@@ -75,15 +75,14 @@ namespace GymHubAPI.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("RecipeId");
 
                     b.ToTable("Recipes");
                 });
 
-            modelBuilder.Entity("GymHubAPI.Entities.RecipeIngrediens", b =>
+            modelBuilder.Entity("GymHubAPI.Entities.RecipeIngredients", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -105,7 +104,7 @@ namespace GymHubAPI.Migrations
 
                     b.HasIndex("RecipeId");
 
-                    b.ToTable("RecipeIngrediens");
+                    b.ToTable("RecipeIngredients");
                 });
 
             modelBuilder.Entity("GymHubAPI.Entities.RecipeSteps", b =>
@@ -225,10 +224,10 @@ namespace GymHubAPI.Migrations
                     b.ToTable("WorkoutsExercises");
                 });
 
-            modelBuilder.Entity("GymHubAPI.Entities.RecipeIngrediens", b =>
+            modelBuilder.Entity("GymHubAPI.Entities.RecipeIngredients", b =>
                 {
                     b.HasOne("GymHubAPI.Entities.Recipe", "Recipe")
-                        .WithMany("RecipeIngrediens")
+                        .WithMany("RecipeIngredients")
                         .HasForeignKey("RecipeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -273,7 +272,7 @@ namespace GymHubAPI.Migrations
 
             modelBuilder.Entity("GymHubAPI.Entities.Recipe", b =>
                 {
-                    b.Navigation("RecipeIngrediens");
+                    b.Navigation("RecipeIngredients");
 
                     b.Navigation("RecipeSteps");
                 });

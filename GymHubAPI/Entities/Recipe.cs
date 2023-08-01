@@ -1,11 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace GymHubAPI.Entities
 {
     public class Recipe
     {
-        public int Id { get; set; }
-        public string Title { get; set; }
+        public int RecipeId { get; set; }
+        public string? Title { get; set; }
         public string? Description { get; set; }
         public int? Protein { get; set; }
         public int? Fat { get; set; }
@@ -13,7 +14,11 @@ namespace GymHubAPI.Entities
         public int? Kcal { get; set; }
         public int? TimeToBeDone { get; set; }
         public string? Category { get; set; }
-        public List<RecipeIngrediens>? RecipeIngrediens { get; set; }
+
+
+        [JsonIgnore]
+        public List<RecipeIngredients>? RecipeIngredients { get; set; }
+        [JsonIgnore]
         public List<RecipeSteps>? RecipeSteps { get; set; }
 
     }

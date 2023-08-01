@@ -60,8 +60,6 @@ namespace GymHubAPI.Services
 
             if (workout is null) throw new NotFoundException("Workout not found");
 
-            var result = _mapper.Map<WorkoutDto>(workout);
-
             return new
             {
                 workout = workout,

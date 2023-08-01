@@ -5,33 +5,23 @@
 namespace GymHubAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class exercisemanytomany2 : Migration
+    public partial class IdtoRecipeId : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.RenameColumn(
                 name: "Id",
-                table: "Workouts",
-                newName: "WorkoutId");
-
-            migrationBuilder.RenameColumn(
-                name: "Id",
-                table: "Exercise",
-                newName: "ExerciseId");
+                table: "Recipes",
+                newName: "RecipeId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.RenameColumn(
-                name: "WorkoutId",
-                table: "Workouts",
-                newName: "Id");
-
-            migrationBuilder.RenameColumn(
-                name: "ExerciseId",
-                table: "Exercise",
+                name: "RecipeId",
+                table: "Recipes",
                 newName: "Id");
         }
     }

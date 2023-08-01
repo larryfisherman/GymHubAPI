@@ -37,7 +37,7 @@ namespace GymHubAPI.Controllers
         [HttpGet("{id}")]
         public ActionResult<RecipeDto> GetRecipeById([FromRoute] int id)
         {
-            RecipeDto recipe = _recipeService.GetRecipeById(id);
+            object recipe = _recipeService.GetRecipeById(id);
             return Ok(recipe);
         }
 

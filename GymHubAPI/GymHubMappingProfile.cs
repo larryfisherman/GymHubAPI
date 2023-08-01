@@ -17,6 +17,9 @@ namespace GymHubAPI
             CreateMap<WorkoutExercises, WorkoutExercisesDto>();
             CreateMap<WorkoutExercisesDto, WorkoutExercises>();
 
+            CreateMap<RecipeIngredients, RecipeIngredientsDto>();
+            CreateMap<RecipeIngredientsDto, RecipeIngredients>();
+
         }
     }
 }

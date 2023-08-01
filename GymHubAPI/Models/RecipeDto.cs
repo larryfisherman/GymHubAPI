@@ -4,7 +4,7 @@ namespace GymHubAPI.Models
 {
     public class RecipeDto
     {
-        public string Title { get; set; }
+        public string? Title { get; set; }
         public string? Description { get; set; }
         public int? Protein { get; set; }
         public int? Fat { get; set; }
@@ -12,7 +12,7 @@ namespace GymHubAPI.Models
         public int? Kcal { get; set; }
         public int? TimeToBeDone { get; set; }
         public string? Category { get; set; }
-        public List<RecipeIngrediens>? RecipeIngrediens { get; set; }
+        public List<RecipeIngredientsDto>? RecipeIngredients { get; set; }
         public List<RecipeSteps>? RecipeSteps { get; set; }
         public ICollection<RecipeCategories>? Categories { get; set; }
     

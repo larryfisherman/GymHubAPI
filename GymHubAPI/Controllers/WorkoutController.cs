@@ -27,7 +27,7 @@ namespace GymHubAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult<WorkoutDto> GetById([FromRoute] int id)
+        public ActionResult<WorkoutDto> GetWorkoutById([FromRoute] int id)
         {
             object workout = _workoutService.GetWorkoutById(id);
             return Ok(workout);

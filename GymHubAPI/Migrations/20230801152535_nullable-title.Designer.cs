@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GymHubAPI.Migrations
 {
     [DbContext(typeof(GymHubDbContext))]
-    [Migration("20230706131909_recipe-categories-update-2")]
-    partial class recipecategoriesupdate2
+    [Migration("20230801152535_nullable-title")]
+    partial class nullabletitle
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,6 +25,29 @@ namespace GymHubAPI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("GymHubAPI.Entities.Exercise", b =>
+                {
+                    b.Property<int>("ExerciseId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ExerciseId"));
+
+                    b.Property<int>("Repeats")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Sets")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ExerciseId");
+
+                    b.ToTable("Exercises");
+                });
+
             modelBuilder.Entity("GymHubAPI.Entities.Recipe", b =>
                 {
                     b.Property<int>("Id")
@@ -35,6 +58,9 @@ namespace GymHubAPI.Migrations
 
                     b.Property<int?>("Carbo")
                         .HasColumnType("int");
+
+                    b.Property<string>("Category")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -52,7 +78,6 @@ namespace GymHubAPI.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -60,58 +85,7 @@ namespace GymHubAPI.Migrations
                     b.ToTable("Recipes");
                 });
 
-            modelBuilder.Entity("GymHubAPI.Entities.RecipeCategories", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<bool>("Active")
-                        .HasColumnType("bit");
-
-                    b.Property<int?>("RecipeId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RecipeId");
-
-                    b.ToTable("RecipeCategories");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Active = false,
-                            Title = "Breakfast"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Active = false,
-                            Title = "Lunch"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Active = false,
-                            Title = "Dinner"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Active = false,
-                            Title = "Saper"
-                        });
-                });
-
-            modelBuilder.Entity("GymHubAPI.Entities.RecipeIngrediens", b =>
+            modelBuilder.Entity("GymHubAPI.Entities.RecipeIngredients", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -126,14 +100,14 @@ namespace GymHubAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("RecipeId")
+                    b.Property<int>("RecipeId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("RecipeId");
 
-                    b.ToTable("Ingrediens");
+                    b.ToTable("RecipeIngredients");
                 });
 
             modelBuilder.Entity("GymHubAPI.Entities.RecipeSteps", b =>
@@ -148,7 +122,7 @@ namespace GymHubAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("RecipeId")
+                    b.Property<int>("RecipeId")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
@@ -195,58 +169,120 @@ namespace GymHubAPI.Migrations
 
             modelBuilder.Entity("GymHubAPI.Entities.Workout", b =>
                 {
+                    b.Property<int>("WorkoutId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("WorkoutId"));
+
+                    b.Property<string>("Author")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("Kcal")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TimeToBeDone")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("WorkoutId");
+
+                    b.ToTable("Workouts");
+                });
+
+            modelBuilder.Entity("GymHubAPI.Entities.WorkoutExercises", b =>
+                {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<bool>("Favourite")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("Kcal")
+                    b.Property<int>("ExerciseId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TimeToBeDone")
+                    b.Property<int?>("Repeats")
                         .HasColumnType("int");
 
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("Sets")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WorkoutId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Workouts");
+                    b.HasIndex("ExerciseId");
+
+                    b.HasIndex("WorkoutId");
+
+                    b.ToTable("WorkoutsExercises");
                 });
 
-            modelBuilder.Entity("GymHubAPI.Entities.RecipeCategories", b =>
+            modelBuilder.Entity("GymHubAPI.Entities.RecipeIngredients", b =>
                 {
-                    b.HasOne("GymHubAPI.Entities.Recipe", null)
-                        .WithMany("Categories")
-                        .HasForeignKey("RecipeId");
-                });
+                    b.HasOne("GymHubAPI.Entities.Recipe", "Recipe")
+                        .WithMany("RecipeIngredients")
+                        .HasForeignKey("RecipeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-            modelBuilder.Entity("GymHubAPI.Entities.RecipeIngrediens", b =>
-                {
-                    b.HasOne("GymHubAPI.Entities.Recipe", null)
-                        .WithMany("Ingrediens")
-                        .HasForeignKey("RecipeId");
+                    b.Navigation("Recipe");
                 });
 
             modelBuilder.Entity("GymHubAPI.Entities.RecipeSteps", b =>
                 {
-                    b.HasOne("GymHubAPI.Entities.Recipe", null)
-                        .WithMany("Steps")
-                        .HasForeignKey("RecipeId");
+                    b.HasOne("GymHubAPI.Entities.Recipe", "Recipe")
+                        .WithMany("RecipeSteps")
+                        .HasForeignKey("RecipeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Recipe");
+                });
+
+            modelBuilder.Entity("GymHubAPI.Entities.WorkoutExercises", b =>
+                {
+                    b.HasOne("GymHubAPI.Entities.Exercise", "Exercise")
+                        .WithMany("WorkoutExercises")
+                        .HasForeignKey("ExerciseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("GymHubAPI.Entities.Workout", "Workout")
+                        .WithMany("WorkoutExercises")
+                        .HasForeignKey("WorkoutId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Exercise");
+
+                    b.Navigation("Workout");
+                });
+
+            modelBuilder.Entity("GymHubAPI.Entities.Exercise", b =>
+                {
+                    b.Navigation("WorkoutExercises");
                 });
 
             modelBuilder.Entity("GymHubAPI.Entities.Recipe", b =>
                 {
-                    b.Navigation("Categories");
+                    b.Navigation("RecipeIngredients");
 
-                    b.Navigation("Ingrediens");
+                    b.Navigation("RecipeSteps");
+                });
 
-                    b.Navigation("Steps");
+            modelBuilder.Entity("GymHubAPI.Entities.Workout", b =>
+                {
+                    b.Navigation("WorkoutExercises");
                 });
 #pragma warning restore 612, 618
         }

@@ -12,7 +12,7 @@ namespace GymHubAPI.Services
         IEnumerable<Recipe> GetAllRecipes();
         public void Create(RecipeDto dto);
         public void Delete(int id);
-        public RecipeDto GetRecipeById(int id);
+        public object GetRecipeById(int id);
         public void Update(int id, RecipeDto dto);
         //public IEnumerable<RecipeCategories> GetAllCategories();
 
@@ -23,6 +23,7 @@ namespace GymHubAPI.Services
         private readonly GymHubDbContext _dbContext;
         private readonly IMapper _mapper;
         private readonly IWebHostEnvironment _hostEnvironment;
+
 
 
         public RecipeService(GymHubDbContext dbContext, IMapper mapper, IWebHostEnvironment hostEnvironment)
@@ -51,7 +52,7 @@ namespace GymHubAPI.Services
 
         public void Delete(int id)
         {
-            var recipe = _dbContext.Recipes.FirstOrDefault(r => r.Id == id);
+            var recipe = _dbContext.Recipes.FirstOrDefault(r => r.RecipeId == id);
 
             if (recipe is null) throw new NotFoundException("Recipe not found");
 
@@ -59,24 +60,29 @@ namespace GymHubAPI.Services
             _dbContext.SaveChanges();
         }
 
-        public RecipeDto GetRecipeById(int id)
+        public object GetRecipeById(int id)
         {
             var recipe = _dbContext
-              .Recipes.Include(s => s.RecipeSteps).Include(i => i.RecipeIngrediens)
-              .FirstOrDefault(r => r.Id == id);
+              .Recipes.Include(s => s.RecipeSteps).Include(i => i.RecipeIngredients)
+              .FirstOrDefault(r => r.RecipeId == id);
+
+            var recipeIngredients = GetIngredientsByRecipeId(id);
 
             if (recipe is null) throw new NotFoundException("Recipe not found");
 
             var result = _mapper.Map<RecipeDto>(recipe);
 
-            return result;
+            return new {
+                recipe = recipe,
+                recipeIngredients = recipeIngredients
+            };
         }
 
         public void Update(int id, RecipeDto dto)
         {
             var recipe = _dbContext
                 .Recipes
-                .FirstOrDefault(r => r.Id == id);
+                .FirstOrDefault(r => r.RecipeId == id);
 
             if (recipe is null) throw new NotFoundException("Recipe not found");
 
@@ -88,39 +94,39 @@ namespace GymHubAPI.Services
             recipe.Kcal = dto.Kcal;
             recipe.TimeToBeDone = dto.TimeToBeDone;
             recipe.Category = dto.Category;
-            recipe.RecipeIngrediens = dto.RecipeIngrediens;
             recipe.RecipeSteps = dto.RecipeSteps;
 
+            AddIngrediensToRecipe(id, dto.RecipeIngredients);
 
             _dbContext.SaveChanges();
         }
 
-        private void AddIngrediensToRecipe(int recipeId, List<RecipeIngrediens> ingrediens)
+        private void AddIngrediensToRecipe(int recipeId, List<RecipeIngredientsDto> ingrediens)
         {
             var recipe = _dbContext.Recipes.Find(recipeId);
 
             if (recipe is null) throw new NotFoundException("Workout not found");
 
-            var existingRecipes = _dbContext.WorkoutsExercises
-                .Where(re => re.Id)
+            var existingRecipes = _dbContext.RecipeIngredients
+                .Where(re => re.RecipeId == recipeId)
                 .ToList();
 
-            //if (existingRecipes.Count > 0) RemoveExercisesConnectedToWorkout(recipeId, exercises);
+            if (existingRecipes.Count > 0) RemoveIngredientsConnectedToRecipe(recipeId, ingrediens);
 
             foreach (var ingredient in ingrediens)
             {
-                var existingRecipe = existingRecipes.FirstOrDefault(we => we.RecipeId);
+                var existingRecipe = existingRecipes.FirstOrDefault(ri => ri.RecipeId == ingredient.RecipeId);
 
                 if (existingRecipe == null)
                 {
-                    var recipeIngredients = new RecipeIngrediens
+                    var recipeIngredients = new RecipeIngredients
                     {
-                        RecipeId = ingredient.RecipeId,
+                        RecipeId = recipeId,
                         Amount = ingredient.Amount,
                         Name = ingredient.Name,
                     };
 
-                    _dbContext.WorkoutsExercises.Add(recipeIngredients);
+                    _dbContext.RecipeIngredients.Add(recipeIngredients);
                 }
                 else
                 {
@@ -132,5 +138,38 @@ namespace GymHubAPI.Services
             _dbContext.SaveChanges();
         }
 
+        private void RemoveIngredientsConnectedToRecipe(int recipeId, List<RecipeIngredientsDto> ingredients)
+        {
+            var receivedIngredientsIds = ingredients.Select(e => e.RecipeId).ToList();
+            var recipe = _dbContext.Recipes.Find(recipeId);
+
+
+            if (receivedIngredientsIds == null || receivedIngredientsIds.Count == 0)
+            {
+                var recipeIngredientsToRemove = _dbContext.RecipeIngredients
+                    .Where(ri => ri.RecipeId == recipeId)
+                    .ToList();
+
+                _dbContext.RecipeIngredients.RemoveRange(recipeIngredientsToRemove);
+            }
+            else
+            {
+                var ingredientsToRemove = recipe.RecipeIngredients
+                    .Where(ri => !receivedIngredientsIds.Contains(ri.RecipeId))
+                    .ToList();
+
+                _dbContext.RecipeIngredients.RemoveRange(ingredientsToRemove);
+            }
+        }
+
+        private List<RecipeIngredientsDto> GetIngredientsByRecipeId(int recipeId)
+        {
+            var ingredientsIds = _dbContext.RecipeIngredients
+                .Where(ri => ri.RecipeId == recipeId)
+                .ToList();
+
+            var ingredients = _mapper.Map<List<RecipeIngredientsDto>>(ingredientsIds);
+            return ingredients;
+        }
     }
 }
