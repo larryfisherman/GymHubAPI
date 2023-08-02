@@ -10,12 +10,10 @@ namespace GymHubAPI.Controllers
     public class WorkoutController : ControllerBase
     {
         private readonly IWorkoutService _workoutService;
-        private readonly GymHubDbContext _dbContext;
 
-        public WorkoutController(IWorkoutService workoutService, GymHubDbContext dbContext)
+        public WorkoutController(IWorkoutService workoutService)
         {
             _workoutService = workoutService;
-            _dbContext = dbContext;
         }
 
         [HttpGet]
