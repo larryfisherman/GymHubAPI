@@ -40,12 +40,14 @@ namespace GymHubAPI.Services
 
         public IEnumerable<Recipe> GetAllRecipes()
         {
-             return _dbContext.Recipes.ToList();
+             return _dbContext.Recipes.Include(r => r.Category).ToList();
         }
 
         public void Create(RecipeDto dto)
         {
             var recipe = _mapper.Map<Recipe>(dto);
+
+            recipe.CreatedDate = DateTime.Now;
             _dbContext.Recipes.Add(recipe);
             _dbContext.SaveChanges();
         }
@@ -93,7 +95,6 @@ namespace GymHubAPI.Services
             recipe.Carbo = dto.Carbo;
             recipe.Kcal = dto.Kcal;
             recipe.TimeToBeDone = dto.TimeToBeDone;
-            recipe.Category = dto.Category;
             recipe.RecipeSteps = dto.RecipeSteps;
 
             AddIngrediensToRecipe(id, dto.RecipeIngredients);

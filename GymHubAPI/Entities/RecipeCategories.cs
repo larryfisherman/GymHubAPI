@@ -1,13 +1,13 @@
 ﻿namespace GymHubAPI.Entities
 {
-    public enum RecipeCategories
+    public class RecipeCategories
     {
-        None = 0,
-        All = 1,
-        Desserts = 2,
-        Soups = 3,
-        Seafood = 4,   
-        Salads  = 5,
-        Meat = 6
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public int CategoryId { get; set; }
+        public int RecipeId { get; set; }
+
+        public Recipe? Recipe { get; set; }
+        public Category? Category { get; set; }
     }
 }
