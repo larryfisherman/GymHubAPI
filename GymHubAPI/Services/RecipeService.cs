@@ -40,7 +40,7 @@ namespace GymHubAPI.Services
 
         public IEnumerable<Recipe> GetAllRecipes()
         {
-             return _dbContext.Recipes.Include(r => r.Category).ToList();
+             return _dbContext.Recipes.ToList();
         }
 
         public void Create(RecipeDto dto)

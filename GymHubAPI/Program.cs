@@ -70,6 +70,7 @@ builder.Services.AddScoped<IIngredientService, IngredientService>();
 
 builder.Services.AddScoped<IExerciseService, ExerciseService>();
 
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 

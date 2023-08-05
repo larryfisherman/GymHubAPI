@@ -14,7 +14,6 @@ namespace GymHubAPI.Models
         public string? Category { get; set; }
         public List<RecipeIngredientsDto>? RecipeIngredients { get; set; }
         public List<RecipeSteps>? RecipeSteps { get; set; }
-        public ICollection<RecipeCategories>? Categories { get; set; }
     
     }
 }

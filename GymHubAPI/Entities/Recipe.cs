@@ -19,9 +19,8 @@ namespace GymHubAPI.Entities
         public List<RecipeIngredients>? RecipeIngredients { get; set; }
         [JsonIgnore]
         public List<RecipeSteps>? RecipeSteps { get; set; }
-
         public int CategoryId { get; set; }
-        public Category Category { get; set; }
+
 
         public List<RecipeCategories>? RecipeCategories { get; set;}
 
