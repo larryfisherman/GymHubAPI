@@ -9,5 +9,7 @@
         public int Carbs { get; set; }
         public int Kcal { get; set; }
         public int Amount { get; set; }
+
+        public List<RecipeIngredients>? RecipeIngredients { get; set; }
     }
 }

@@ -115,13 +115,14 @@ namespace GymHubAPI.Services
 
             foreach (var ingredient in ingrediens)
             {
-                var existingRecipe = existingRecipes.FirstOrDefault(ri => ri.RecipeId == ingredient.RecipeId);
+                var existingRecipe = existingRecipes.FirstOrDefault(ri => ri.Id == ingredient.Id);
 
                 if (existingRecipe == null)
                 {
                     var recipeIngredients = new RecipeIngredients
                     {
                         RecipeId = recipeId,
+                        IngredientId = ingredient.IngredientId,
                         Amount = ingredient.Amount,
                         Name = ingredient.Name,
                     };
@@ -164,12 +165,18 @@ namespace GymHubAPI.Services
 
         private List<RecipeIngredientsDto> GetIngredientsByRecipeId(int recipeId)
         {
-            var ingredientsIds = _dbContext.RecipeIngredients
-                .Where(ri => ri.RecipeId == recipeId)
+            var ingredientIds = _dbContext.RecipeIngredients
+              .Where(ri => ri.RecipeId == recipeId)
+              .Select(ri => ri.IngredientId) 
+              .ToList();
+
+            var ingredients = _dbContext.Ingredients
+                .Where(i => ingredientIds.Contains(i.IngredientId))
                 .ToList();
 
-            var ingredients = _mapper.Map<List<RecipeIngredientsDto>>(ingredientsIds);
-            return ingredients;
+            var  ingredientsDto = _mapper.Map<List<RecipeIngredientsDto>>(ingredients);
+
+            return ingredientsDto;
         }
     }
 }
