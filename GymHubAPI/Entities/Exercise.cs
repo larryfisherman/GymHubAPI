@@ -9,6 +9,7 @@ namespace GymHubAPI.Entities
         public int Sets { get; set; }
         public int Repeats { get; set; }
 
+        [JsonIgnore]
         public List<WorkoutExercises>? WorkoutExercises { get; set; }
     }
 }

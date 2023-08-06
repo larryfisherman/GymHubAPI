@@ -9,7 +9,12 @@ namespace GymHubAPI.Entities
 {
     public class GymHubDbContext : DbContext
     {
-        private string _connectionString = "Server=(localdb)\\mssqllocaldb;Database=GymHubDb;Trusted_Connection=True;";
+
+        public GymHubDbContext(DbContextOptions<GymHubDbContext> options) : base(options) 
+        {
+                
+                
+        }
 
         public DbSet<User> Users { get; set; }
         public DbSet<Recipe> Recipes { get; set; }
@@ -40,11 +45,5 @@ namespace GymHubAPI.Entities
             modelBuilder.Entity<RecipeSteps>().HasOne(w => w.Recipe).WithMany(ri => ri.RecipeSteps).HasForeignKey(r => r.RecipeId);
 
         }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer(_connectionString);
-        }
-
     }
 }

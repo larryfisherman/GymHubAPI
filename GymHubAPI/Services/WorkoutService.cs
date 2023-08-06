@@ -35,6 +35,7 @@ namespace GymHubAPI.Services
         public void Create(WorkoutDto dto)
         {
             var workout = _mapper.Map<Workout>(dto);
+
             workout.CreatedDate = DateTime.Now;
             _dbContext.Workouts.Add(workout);
             _dbContext.SaveChanges();

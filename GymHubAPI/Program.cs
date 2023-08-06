@@ -3,6 +3,7 @@ using GymHubAPI.Entities;
 using GymHubAPI.Services;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -24,7 +25,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddDbContext<GymHubDbContext>();
+builder.Services.AddDbContext<GymHubDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("GymHubDbConnection")));
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddCors(options =>
 {
