@@ -1,4 +1,6 @@
-﻿namespace GymHubAPI.Entities
+﻿using System.Text.Json.Serialization;
+
+namespace GymHubAPI.Entities
 {
     public class RecipeCategories
     {
@@ -7,7 +9,9 @@
         public int CategoryId { get; set; }
         public int RecipeId { get; set; }
 
+        [JsonIgnore]
         public Recipe? Recipe { get; set; }
+        [JsonIgnore]
         public Category? Category { get; set; }
     }
 }
