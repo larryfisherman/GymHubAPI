@@ -20,10 +20,6 @@ namespace GymHubAPI
             CreateMap<RecipeIngredients, RecipeIngredientsDto>();
             CreateMap<RecipeIngredientsDto, RecipeIngredients>();
 
-
-            CreateMap<RecipeCategories, RecipeCategoriesDto>();
-            CreateMap<RecipeCategoriesDto, RecipeCategories>();
-
             CreateMap<Ingredient, RecipeIngredientsDto>()
            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.IngredientId))
            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name));

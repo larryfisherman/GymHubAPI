@@ -67,8 +67,6 @@ namespace GymHubAPI.Services
             var recipe = _dbContext.Recipes
              .Include(r => r.RecipeSteps)
              .Include(r => r.RecipeIngredients)
-             .Include(r => r.RecipeCategories)  
-                 .ThenInclude(rc => rc.Category) 
              .FirstOrDefault(r => r.RecipeId == id);
 
             var recipeIngredients = GetIngredientsByRecipeId(id);
@@ -99,9 +97,9 @@ namespace GymHubAPI.Services
             recipe.Kcal = dto.Kcal;
             recipe.TimeToBeDone = dto.TimeToBeDone;
             recipe.RecipeSteps = dto.RecipeSteps;
+            recipe.CategoryId = dto.CategoryId;
 
             AddIngrediensToRecipe(id, dto.RecipeIngredients);
-            AddCategoryToRecipe(id, dto.CategoryId);
 
             _dbContext.SaveChanges();
         }
@@ -184,26 +182,5 @@ namespace GymHubAPI.Services
             return ingredientsDto;
         }
 
-        private void AddCategoryToRecipe(int recipeId, int categoryId)
-        {
-            var category = _dbContext.Categories.FirstOrDefault(c => c.CategoryId == categoryId);
-
-            if (category is null) throw new NotFoundException("Category not found");
-
-
-            // Check if the relationship already exists in RecipeCategories
-            var existingRelationship = _dbContext.RecipeCategories
-                .FirstOrDefault(rc => rc.RecipeId == recipeId && rc.CategoryId == categoryId);
-
-            if (existingRelationship == null)
-            {
-                // Relationship doesn't exist, add it to RecipeCategories
-                var recipeCategory = new RecipeCategories {Name = category.Name ,RecipeId = recipeId, CategoryId = categoryId };
-                _dbContext.RecipeCategories.Add(recipeCategory);
-            }
-
-            // Save changes to the database
-            _dbContext.SaveChanges();
-        }
     }
 }
