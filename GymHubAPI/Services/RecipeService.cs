@@ -3,6 +3,7 @@ using GymHubAPI.Models;
 using AutoMapper;
 using GymHubAPI.Exceptions;
 using Microsoft.EntityFrameworkCore;
+using GymHubAPI.Migrations;
 
 
 namespace GymHubAPI.Services
@@ -14,8 +15,6 @@ namespace GymHubAPI.Services
         public void Delete(int id);
         public object GetRecipeById(int id);
         public void Update(int id, RecipeDto dto);
-        //public IEnumerable<RecipeCategories> GetAllCategories();
-
     }
 
     public class RecipeService : IRecipeService
@@ -33,14 +32,9 @@ namespace GymHubAPI.Services
             _hostEnvironment = hostEnvironment;
         }
 
-        //public IEnumerable<RecipeCategories> GetAllCategories()
-        //{
-        //    return _dbContext.RecipeCategories.ToList();
-        //}
-
         public IEnumerable<Recipe> GetAllRecipes()
         {
-             return _dbContext.Recipes.ToList();
+            return _dbContext.Recipes.ToList();
         }
 
         public void Create(RecipeDto dto)
@@ -70,6 +64,7 @@ namespace GymHubAPI.Services
              .FirstOrDefault(r => r.RecipeId == id);
 
             var recipeIngredients = GetIngredientsByRecipeId(id);
+            var recipeSteps = GetStepsByRecipeId(id);
 
             if (recipe is null) throw new NotFoundException("Recipe not found");
 
@@ -78,6 +73,7 @@ namespace GymHubAPI.Services
             return new {
                 recipe = recipe,
                 recipeIngredients = recipeIngredients,
+                recipeSteps = recipeSteps
             };
         }
 
@@ -100,7 +96,6 @@ namespace GymHubAPI.Services
             recipe.CategoryId = dto.CategoryId;
 
             AddIngrediensToRecipe(id, dto.RecipeIngredients);
-
             _dbContext.SaveChanges();
         }
 
@@ -182,5 +177,16 @@ namespace GymHubAPI.Services
             return ingredientsDto;
         }
 
+        private List<RecipeStepDto> GetStepsByRecipeId(int recipeId)
+        {
+            var steps = _dbContext.RecipeSteps
+             .Where(ri => ri.RecipeId == recipeId)
+             .ToList();
+
+            var stepsDto = _mapper.Map<List<RecipeStepDto>>(steps);
+
+            return stepsDto;
+        }
     }
+
 }

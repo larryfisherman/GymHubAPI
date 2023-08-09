@@ -4,6 +4,7 @@ using GymHubAPI.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GymHubAPI.Migrations
 {
     [DbContext(typeof(GymHubDbContext))]
-    partial class GymHubDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230808224807_recipe-steps-2")]
+    partial class recipesteps2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -173,16 +176,42 @@ namespace GymHubAPI.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("RecipeId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("StepId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("RecipeId");
 
+                    b.HasIndex("StepId");
+
                     b.ToTable("RecipeSteps");
+                });
+
+            modelBuilder.Entity("GymHubAPI.Entities.Step", b =>
+                {
+                    b.Property<int>("StepId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StepId"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RecipeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("StepId");
+
+                    b.ToTable("Steps");
                 });
 
             modelBuilder.Entity("GymHubAPI.Entities.User", b =>
@@ -301,7 +330,13 @@ namespace GymHubAPI.Migrations
                         .WithMany("RecipeSteps")
                         .HasForeignKey("RecipeId");
 
+                    b.HasOne("GymHubAPI.Entities.Step", "Step")
+                        .WithMany()
+                        .HasForeignKey("StepId");
+
                     b.Navigation("Recipe");
+
+                    b.Navigation("Step");
                 });
 
             modelBuilder.Entity("GymHubAPI.Entities.WorkoutExercises", b =>

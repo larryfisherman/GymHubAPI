@@ -22,10 +22,9 @@ namespace GymHubAPI.Entities
         public DbSet<Exercise> Exercises { get; set; }
         public DbSet<WorkoutExercises> WorkoutsExercises { get;set; }
         public DbSet<RecipeIngredients> RecipeIngredients { get; set; }
-        public DbSet<RecipeSteps> RecipeSteps { get; set; }
+        public DbSet<RecipeStep> RecipeSteps { get; set; }
         public DbSet<Ingredient> Ingredients { get; set; }
         public DbSet<Category> Categories { get; set; }
-
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -42,7 +41,7 @@ namespace GymHubAPI.Entities
 
             modelBuilder.Entity<RecipeIngredients>().HasOne(ri => ri.Ingredient).WithMany(i => i.RecipeIngredients).HasForeignKey(ri => ri.IngredientId);
 
-            modelBuilder.Entity<RecipeSteps>().HasOne(w => w.Recipe).WithMany(ri => ri.RecipeSteps).HasForeignKey(r => r.RecipeId);
+            modelBuilder.Entity<RecipeStep>().HasOne(w => w.Recipe).WithMany(ri => ri.RecipeSteps).HasForeignKey(r => r.RecipeId);
 
         }
     }

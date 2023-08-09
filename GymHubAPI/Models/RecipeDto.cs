@@ -13,7 +13,8 @@ namespace GymHubAPI.Models
         public int? TimeToBeDone { get; set; }
         public int CategoryId { get; set; }
         public List<RecipeIngredientsDto>? RecipeIngredients { get; set; }
-        public List<RecipeSteps>? RecipeSteps { get; set; }
+
+        public List<RecipeStep>? RecipeSteps { get; set; }
     
     }
 }

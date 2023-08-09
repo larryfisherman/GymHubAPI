@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using GymHubAPI.Models;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
 namespace GymHubAPI.Entities
@@ -19,7 +20,8 @@ namespace GymHubAPI.Entities
 
         [JsonIgnore]
         public List<RecipeIngredients>? RecipeIngredients { get; set; }
+
         [JsonIgnore]
-        public List<RecipeSteps>? RecipeSteps { get; set; }
+        public List<RecipeStep>? RecipeSteps { get; set; }
     }
 }
