@@ -36,7 +36,7 @@ namespace GymHubAPI.Migrations
 
                     b.HasKey("CategoryId");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("GymHubAPI.Entities.Exercise", b =>
@@ -59,7 +59,7 @@ namespace GymHubAPI.Migrations
 
                     b.HasKey("ExerciseId");
 
-                    b.ToTable("Exercises");
+                    b.ToTable("Exercises", (string)null);
                 });
 
             modelBuilder.Entity("GymHubAPI.Entities.Ingredient", b =>
@@ -91,7 +91,7 @@ namespace GymHubAPI.Migrations
 
                     b.HasKey("IngredientId");
 
-                    b.ToTable("Ingredients");
+                    b.ToTable("Ingredients", (string)null);
                 });
 
             modelBuilder.Entity("GymHubAPI.Entities.Recipe", b =>
@@ -131,7 +131,7 @@ namespace GymHubAPI.Migrations
 
                     b.HasKey("RecipeId");
 
-                    b.ToTable("Recipes");
+                    b.ToTable("Recipes", (string)null);
                 });
 
             modelBuilder.Entity("GymHubAPI.Entities.RecipeIngredients", b =>
@@ -161,7 +161,7 @@ namespace GymHubAPI.Migrations
 
                     b.HasIndex("RecipeId");
 
-                    b.ToTable("RecipeIngredients");
+                    b.ToTable("RecipeIngredients", (string)null);
                 });
 
             modelBuilder.Entity("GymHubAPI.Entities.RecipeSteps", b =>
@@ -182,7 +182,7 @@ namespace GymHubAPI.Migrations
 
                     b.HasIndex("RecipeId");
 
-                    b.ToTable("RecipeSteps");
+                    b.ToTable("RecipeSteps", (string)null);
                 });
 
             modelBuilder.Entity("GymHubAPI.Entities.User", b =>
@@ -213,7 +213,7 @@ namespace GymHubAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("GymHubAPI.Entities.Workout", b =>
@@ -244,7 +244,7 @@ namespace GymHubAPI.Migrations
 
                     b.HasKey("WorkoutId");
 
-                    b.ToTable("Workouts");
+                    b.ToTable("Workouts", (string)null);
                 });
 
             modelBuilder.Entity("GymHubAPI.Entities.WorkoutExercises", b =>
@@ -273,7 +273,7 @@ namespace GymHubAPI.Migrations
 
                     b.HasIndex("WorkoutId");
 
-                    b.ToTable("WorkoutsExercises");
+                    b.ToTable("WorkoutsExercises", (string)null);
                 });
 
             modelBuilder.Entity("GymHubAPI.Entities.RecipeIngredients", b =>
